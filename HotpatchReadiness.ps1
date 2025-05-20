@@ -1,3 +1,30 @@
+$global:scriptPath = $myinvocation.mycommand.definition
+
+function Restart-AsAdmin {
+    $pwshCommand = "powershell"
+    if ($PSVersionTable.PSVersion.Major -ge 6) {
+        $pwshCommand = "pwsh"
+    }
+
+    try {
+        Write-Host "This script requires administrator permissions to check for SecureBoot. Attempting to restart script with elevated permissions..."
+        $arguments = "-NoExit -Command `"& '$scriptPath'`""
+        Start-Process $pwshCommand -Verb runAs -ArgumentList $arguments
+        exit 0
+    } catch {
+        throw "Failed to elevate permissions. Please run this script as Administrator."
+    }
+}
+
+
+    if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+        if ([System.Environment]::UserInteractive) {
+            Restart-AsAdmin
+        } else {
+            throw "This script requires administrator permissions to check for SecureBoot. Please run this script as Administrator."
+        }
+}
+
 function Test-OS {
     $os = get-ciminstance -classname Win32_OperatingSystem
     if ($os.Caption -like "*Windows Server 2025*") {
