@@ -53,7 +53,7 @@ function Test-VBS {
 # This function will check to see if UEFI and Secure Boot are enabled.
 # UEFI and Secure Boot are requirements for hotpatching.
 # This specific part requires administrator permissions to run.
-function Test-UEFI-SecureBoot {
+function Test-UEFISecureBoot {
     $firmware = get-ciminstance -classname Win32_BIOS
     if ($firmware.SMBIOSBIOSVersion -like "*VMW71*" -or $firmware.SMBIOSBIOSVersion -like "*UEFI*") {
         $secureboot = Confirm-SecureBootUEFI
@@ -82,5 +82,5 @@ function Test-HotpatchBaseline {
 
 Test-OS
 Test-VBS
-Test-UEFI-SecureBoot
+Test-UEFISecureBoot
 Test-HotpatchBaseline
