@@ -1,3 +1,6 @@
+# This script checks a server for readiness to enable hotpatching.
+# Certain parts of this script require administrator permissions to run. This will attempt to restart the script with elevated permissions if it is not alredy running as admin.
+
 $global:scriptPath = $myinvocation.mycommand.definition
 
 function Restart-AsAdmin {
@@ -25,6 +28,7 @@ function Restart-AsAdmin {
         }
 }
 
+# This function will check to see if the server is running Windows Server 2025.
 function Test-OS {
     $os = get-ciminstance -classname Win32_OperatingSystem
     if ($os.Caption -like "*Windows Server 2025*") {
@@ -34,6 +38,8 @@ function Test-OS {
 }
 }
 
+# This function will check to see if Virtualization Based Security (VBS) is enabled.
+# VBS is a requirement for hotpatching.
 function Test-VBS {
     $vbsRegPath = "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity"
     $enabled = (Get-ItemProperty -Path $vbsRegPath -Name Enabled -ErrorAction SilentlyContinue).Enabled
@@ -44,6 +50,9 @@ function Test-VBS {
     }
 }
 
+# This function will check to see if UEFI and Secure Boot are enabled.
+# UEFI and Secure Boot are requirements for hotpatching.
+# This specific part requires administrator permissions to run.
 function Test-UEFI-SecureBoot {
     $firmware = get-ciminstance -classname Win32_BIOS
     if ($firmware.SMBIOSBIOSVersion -like "*VMW71*" -or $firmware.SMBIOSBIOSVersion -like "*UEFI*") {
@@ -61,6 +70,7 @@ function Test-UEFI-SecureBoot {
     }
 }
 
+# This function will check to see if the OS version is running a compatible build for hotpatching.
 function Test-HotpatchBaseline {
     $os = get-ciminstance -classname Win32_OperatingSystem
     if ($os.BuildNumber -ge 26100) {
