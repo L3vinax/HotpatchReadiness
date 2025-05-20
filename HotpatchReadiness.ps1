@@ -35,7 +35,7 @@ function Test-OS {
         Write-Host "OS: Windows Server 2025" -ForegroundColor "Green"
     } else {
         Write-Host "OS: Not Windows Server 2025" -ForegroundColor "Red"
-}
+    }
 }
 
 # This function will check to see if Virtualization Based Security (VBS) is enabled.
