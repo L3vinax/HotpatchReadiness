@@ -31,7 +31,9 @@ function Restart-AsAdmin {
 # This function will check to see if the server is running Windows Server 2025.
 function Test-OS {
     $os = get-ciminstance -classname Win32_OperatingSystem
-    if ($os.Caption -like "*Windows Server 2025*") {
+    $build = [int]($os.BuildNumber)
+    $hotpatchSKU = (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion').EditionID -eq "ServerAzureEditionHotpatch"
+    if (($os.Caption -like "*Windows Server 2025*") -or ($os.Caption -like "*Windows Server 2022*" -and $build -ge 20348 -and $hotpatchSKU) {
         Write-Host "OS: Windows Server 2025" -ForegroundColor "Green"
     } else {
         Write-Host "OS: Not Windows Server 2025" -ForegroundColor "Red"
