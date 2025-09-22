@@ -75,7 +75,7 @@ function Test-UEFISecureBoot {
 # This function will check to see if the OS version is running a compatible build for hotpatching.
 function Test-HotpatchBaseline {
     $os = get-ciminstance -classname Win32_OperatingSystem
-    if ($os.BuildNumber -ge 26100) {
+    if ($os.BuildNumber -ge 26100 -or $os.BuildNumber -ge 20348) {
         Write-Host "Hotpatch Baseline: Supported" -ForegroundColor "Green"
     } else {
         Write-Host "Hotpatch Baseline: Not Supported" -ForegroundColor "Red"
