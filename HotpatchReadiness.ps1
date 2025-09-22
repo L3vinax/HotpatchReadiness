@@ -32,8 +32,8 @@ function Restart-AsAdmin {
 function Test-OS {
     $os = get-ciminstance -classname Win32_OperatingSystem
     $build = [int]($os.BuildNumber)
-    $hotpatchSKU = (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion').EditionID -eq "ServerAzureEditionHotpatch"
-    if (($os.Caption -like "*Windows Server 2025*") -or ($os.Caption -like "*Windows Server 2022*" -and $build -ge 20348 -and $hotpatchSKU) {
+    $hotpatchSKU = (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion').EditionID -eq "ServerTurbine"
+    if (($os.Caption -like "*Windows Server 2025*") -or ($os.Caption -like "*Windows Server 2022*" -and $build -ge 20348 -and $hotpatchSKU)) {
         Write-Host "OS: Supported OS Version" -ForegroundColor "Green"
     } else {
         Write-Host "OS: Not Supported Windows Version" -ForegroundColor "Red"
