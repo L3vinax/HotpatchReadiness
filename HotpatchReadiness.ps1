@@ -34,9 +34,9 @@ function Test-OS {
     $build = [int]($os.BuildNumber)
     $hotpatchSKU = (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion').EditionID -eq "ServerAzureEditionHotpatch"
     if (($os.Caption -like "*Windows Server 2025*") -or ($os.Caption -like "*Windows Server 2022*" -and $build -ge 20348 -and $hotpatchSKU) {
-        Write-Host "OS: Windows Server 2025" -ForegroundColor "Green"
+        Write-Host "OS: Supported OS Version" -ForegroundColor "Green"
     } else {
-        Write-Host "OS: Not Windows Server 2025" -ForegroundColor "Red"
+        Write-Host "OS: Not Supported Windows Version" -ForegroundColor "Red"
     }
 }
 
